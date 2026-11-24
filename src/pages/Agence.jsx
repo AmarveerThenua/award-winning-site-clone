@@ -31,19 +31,19 @@ const Agence = () => {
     () => {
       ScrollTrigger.create({
         trigger: imageDivRef.current,
-        start: "top 20.5%",
+        start: "top 20%",
         end: "+=600",
         markers: true,
-        scrub: true,
+        scrub: 1,
         pin: true,
         pinSpacing: true,
-        onUpdate: (elem) => {
-          let imageIndex;
-          if (elem.progress < 1) {
-            imageIndex = Math.floor(elem.progress * imageArray.length);
-          } else {
-            imageIndex = Math.floor(elem.progress * imageArray.length) - 1;
-          }
+
+        onUpdate: (self) => {
+          let imageIndex = Math.min(
+            Math.floor(self.progress * imageArray.length),
+            imageArray.length - 1,
+          );
+
           imageRef.current.src = imageArray[imageIndex];
         },
       });
@@ -53,8 +53,8 @@ const Agence = () => {
 
   return (
     <div>
-      <div className=" section1">
-        <div ref={imageDivRef} className=" absolute top-30 left-[29vw]">
+      <div className=" section1 relative  py-1">
+        <div ref={imageDivRef} className=" absolute top-50 left-[29vw]">
           <img
             ref={imageRef}
             className="h-[20vw] w-[15vw] rounded-3xl object-cover"
@@ -62,7 +62,7 @@ const Agence = () => {
             alt=""
           />
         </div>
-        <div className="font-[font1] mt-80 relative w-full">
+        <div className="font-[font1] mt-70 relative w-full">
           <div className="w-full">
             <h1 className="text-[20vw]  leading-none uppercase text-center">
               Seven7y <br />
@@ -80,7 +80,6 @@ const Agence = () => {
             tell.
           </p>
         </div>
-        ;
       </div>
       <div className="section2"></div>
     </div>
