@@ -1,15 +1,26 @@
+
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useRef } from "react";
-import { useContext } from "react";
+import { useRef, useContext } from "react";
 import { NavBarContext } from "../../context/NavContext";
+
 const FullScreenNav = () => {
   const [navOpen, setNavOpen] = useContext(NavBarContext);
+
   const stairsRef = useRef(null);
   const navLinkRef = useRef(null);
+  const navRef = useRef(null);
+  const hasMounted = useRef(false);
+
   useGSAP(() => {
     const stairs = stairsRef.current.children;
-    const nav = document.querySelector("#full-screen-nav");
+    const nav = navRef.current;
+
+    // Prevent animation from running on initial render
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
 
     if (navOpen) {
       gsap.set(nav, {
@@ -35,7 +46,6 @@ const FullScreenNav = () => {
         ease: "power3.out",
       });
 
-      /
       tl.to(
         ".navLinks",
         {
@@ -43,9 +53,8 @@ const FullScreenNav = () => {
           duration: 0.6,
           ease: "power3.out",
         },
-        "-=0.3",
+        "-=0.3"
       );
-
 
       tl.from(
         navLinkRef.current,
@@ -54,7 +63,7 @@ const FullScreenNav = () => {
           duration: 0.5,
           ease: "power4.out",
         },
-        "-=0.2",
+        "-=0.2"
       );
     } else {
       const tl = gsap.timeline({
@@ -71,7 +80,6 @@ const FullScreenNav = () => {
         ease: "power3.in",
       });
 
-
       tl.to(stairs, {
         yPercent: -100,
         duration: 0.7,
@@ -82,23 +90,31 @@ const FullScreenNav = () => {
       });
     }
   }, [navOpen]);
+
   return (
     <div
+      ref={navRef}
       id="full-screen-nav"
       style={{ display: "none" }}
-      className="min-h-screen w-full text-white py-1 overflow-x-hidden z-[100] absolute inset-0 overflow-hidden"
+      className={`fixed inset-0 min-h-screen w-full text-white py-1 overflow-hidden z-[100] ${
+        navOpen ? "pointer-events-auto" : "pointer-events-none"
+      }`}
     >
       <div>
-        <div ref={stairsRef} className=" absolute inset-0 stairs  w-full flex ">
-          <div className=" stair h-full w-1/5 bg-black "></div>
-          <div className=" stair h-full w-1/5 bg-black "></div>
-          <div className=" stair h-full w-1/5 bg-black "></div>
-          <div className=" stair h-full w-1/5 bg-black "></div>
-          <div className=" stair h-full w-1/5 bg-black "></div>
+        <div
+          ref={stairsRef}
+          className="absolute inset-0 stairs w-full flex"
+        >
+          <div className="stair h-full w-1/5 bg-black"></div>
+          <div className="stair h-full w-1/5 bg-black"></div>
+          <div className="stair h-full w-1/5 bg-black"></div>
+          <div className="stair h-full w-1/5 bg-black"></div>
+          <div className="stair h-full w-1/5 bg-black"></div>
         </div>
       </div>
-      <div>
-        <div className="w-full  flex justify-between navLinks">
+
+      <div className="relative z-10">
+        <div className="w-full flex justify-between navLinks">
           <div className="py-2 px-3 w-fit z-50">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -113,241 +129,83 @@ const FullScreenNav = () => {
               ></path>
             </svg>
           </div>
+
           <div
-            onClick={() => {
-              setNavOpen(false);
-            }}
-            className=" h-20 w-32 p-1 relative cursor-pointer"
+            onClick={() => setNavOpen(false)}
+            className="h-20 w-32 p-1 relative cursor-pointer"
           >
             <div className="absolute top-1/2 left-1/2 border bg-[#D3FD50] w-1 h-full -rotate-45 -translate-x-1/2 -translate-y-1/2 origin-center" />
             <div className="absolute top-1/2 left-1/2 border bg-[#D3FD50] w-1 h-full rotate-45 -translate-x-1/2 -translate-y-1/2 origin-center" />
           </div>
         </div>
+
         <div id="links" className="w-full mt-8">
           <div ref={navLinkRef} className="link w-full py-1">
-            <div className="moveX relative w-full  flex justify-center items-center border-t border-white">
+
+            {/* Project */}
+            <div className="moveX relative w-full flex justify-center items-center border-t border-white">
               <h1 className="font-[font2] text-[6vw]">Project</h1>
 
               <div className="linksMove absolute flex items-center gap-3 bg-[#D3FD50] text-black font-[font2] uppercase">
-                {/* First set */}
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c"
-                  alt=""
-                />
-
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b"
-                  alt=""
-                />
-
-                {/* Duplicate set */}
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c"
-                  alt=""
-                />
-
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b"
-                  alt=""
-                />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b" alt="" />
               </div>
             </div>
-            <div className="moveX relative w-full  flex justify-center items-center border-t border-white">
+
+            {/* Agence */}
+            <div className="moveX relative w-full flex justify-center items-center border-t border-white">
               <h1 className="font-[font2] text-[6vw]">Agence</h1>
 
               <div className="linksMove absolute flex items-center gap-3 bg-[#D3FD50] text-black font-[font2] uppercase">
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c"
-                  alt=""
-                />
-
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b"
-                  alt=""
-                />
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c"
-                  alt=""
-                />
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b"
-                  alt=""
-                />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b" alt="" />
               </div>
             </div>
-            <div className="moveX relative w-full  flex justify-center items-center border-t border-white">
+
+            {/* Contact */}
+            <div className="moveX relative w-full flex justify-center items-center border-t border-white">
               <h1 className="font-[font2] text-[6vw]">Contact</h1>
 
               <div className="linksMove absolute flex items-center gap-3 bg-[#D3FD50] text-black font-[font2] uppercase">
-                {/* First set */}
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c"
-                  alt=""
-                />
-
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b"
-                  alt=""
-                />
-
-                {/* Duplicate set */}
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c"
-                  alt=""
-                />
-
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b"
-                  alt=""
-                />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b" alt="" />
               </div>
             </div>
-            <div className="moveX relative w-full  flex justify-center items-center border-y border-white">
+
+            {/* Contact */}
+            <div className="moveX relative w-full flex justify-center items-center border-y border-white">
               <h1 className="font-[font2] text-[6vw]">Contact</h1>
 
               <div className="linksMove absolute flex items-center gap-3 bg-[#D3FD50] text-black font-[font2] uppercase">
-                {/* First set */}
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c"
-                  alt=""
-                />
-
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b"
-                  alt=""
-                />
-
-                {/* Duplicate set */}
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c"
-                  alt=""
-                />
-
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b"
-                  alt=""
-                />
-              </div>
-              <div className="linksMove absolute flex items-center gap-3 bg-[#D3FD50] text-black font-[font2] uppercase">
-                {/* First set */}
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c"
-                  alt=""
-                />
-
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b"
-                  alt=""
-                />
-
-                {/* Duplicate set */}
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c"
-                  alt=""
-                />
-
-                <h2 className="text-[6vw] whitespace-nowrap">
-                  Pour Tout savoir
-                </h2>
-
-                <img
-                  className="h-[5vw] w-60 shrink-0 rounded-full object-cover"
-                  src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b"
-                  alt=""
-                />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/iA_BRAND/Thumbnail.png?w=640&h=290&s=755b635c06d126151d64017fa1042a7c" alt="" />
+                <h2 className="text-[6vw] whitespace-nowrap">Pour Tout savoir</h2>
+                <img className="h-[5vw] w-60 shrink-0 rounded-full object-cover" src="https://k72.ca/images/caseStudies/PJC/Thumbnails/PJC_SiteK72_Thumbnail_640x290.jpg?w=640&h=290&s=ac50a70feaaa2601b3aacad544c6045b" alt="" />
               </div>
             </div>
+
           </div>
         </div>
       </div>

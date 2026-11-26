@@ -1,10 +1,10 @@
-// components/home/Video.jsx
+
 import homeVideo from "../../assets/videos/home.mp4";
 
 const Video = ({ variant = "background" }) => {
   if (variant === "inline") {
     return (
-      <span className="inline-block h-full aspect-video overflow-hidden rounded-full align-middle ">
+      <span className="inline-block h-full aspect-video overflow-hidden rounded-full align-middle">
         <video
           className="w-full h-full object-cover"
           loop
@@ -17,11 +17,10 @@ const Video = ({ variant = "background" }) => {
     );
   }
 
-  // fullscreen background variant (default)
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden -z-10">
+    <div className="fixed inset-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
       <video
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover pointer-events-none"
         loop
         autoPlay
         muted

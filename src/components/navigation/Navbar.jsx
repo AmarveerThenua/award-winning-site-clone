@@ -11,7 +11,7 @@ const Navbar = () => {
   const [navOpen, setNavOpen] = useContext(NavBarContext);
 
   return (
-    <div className="fixed inset-0 z-20">
+    <div className="fixed top-0 left-0 w-full z-20">
       <div className="flex justify-between">
         <div className="p-3">
           <svg

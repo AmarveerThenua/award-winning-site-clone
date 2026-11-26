@@ -33,7 +33,6 @@ const Agence = () => {
         trigger: imageDivRef.current,
         start: "top 20%",
         end: "+=600",
-        markers: true,
         scrub: 1,
         pin: true,
         pinSpacing: true,
@@ -72,12 +71,11 @@ const Agence = () => {
         </div>
         <div className="pl-[40%]">
           <p className="text-6xl">
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; We're inquisitive and open-minded, and we make sure
-            creativity crowds out ego from every corner. A brand is a living
-            thing, with values, a personality and a story. If we ignore that, we
-            can distance. We bring that perspective to every brand story we help
-            tell.
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; We're inquisitive
+            and open-minded, and we make sure creativity crowds out ego from
+            every corner. A brand is a living thing, with values, a personality
+            and a story. If we ignore that, we can distance. We bring that
+            perspective to every brand story we help tell.
           </p>
         </div>
       </div>
@@ -87,4 +85,3 @@ const Agence = () => {
 };
 
 export default Agence;
-
