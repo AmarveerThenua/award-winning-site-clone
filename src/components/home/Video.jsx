@@ -1,5 +1,4 @@
-
-import homeVideo from "../../assets/videos/home.mp4";
+import homeVideo from "../../../public/videos/home.mp4";
 
 const Video = ({ variant = "background" }) => {
   if (variant === "inline") {
